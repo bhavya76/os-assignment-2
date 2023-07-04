@@ -112,8 +112,6 @@ int main(int argc, char* argv[]){
                 }
                 printf("%s", myargv[j]);fflush(stdout);
                 continue;
-                // printf("%s",myargv[j]);fflush(stdout);
-                // continue;
             }
             else if (strcmp(myargv[1], "--help") == 0){
                 printf("Echo returns the string of user's input.\n");fflush(stdout);
@@ -122,7 +120,6 @@ int main(int argc, char* argv[]){
             }
             else if (strcmp(myargv[1], "-E") == 0){
                 int i = 0; int j = 1;
-            //char dol = "$";
                 while(myargv[j+1]!=NULL){
                     printf("%s ", myargv[2]);
                     fflush(stdout);
@@ -151,20 +148,17 @@ int main(int argc, char* argv[]){
             //pwd -p -->not wroking
             if(myargc == 2){
                 if((strcmp(argv[1],"-L")==0)||(strcmp(argv[1], "-l") == 0)){
-                    // printf("if\n");fflush(stdout);
                     char defvar[1000];
                     char* buf = getcwd(defvar, sizeof(defvar));
                     printf("%s\n", buf);
                     fflush(stdout);
                     }
                 else if((strcmp(argv[1],"-P")==0)||(strcmp(argv[1], "-p") == 0)){
-                    // printf("else if\n");fflush(stdout);
                     char *home=getenv("HOME");
                     printf("%s\n",home );
                 }
             }
             else{
-                // printf("checkk\n");fflush(stdout);
                 char defvar[1000];
 			    char* buf = getcwd(defvar, sizeof(defvar));
 			    printf("%s\n", buf);
@@ -183,14 +177,6 @@ int main(int argc, char* argv[]){
             }
             else{
                 c = chdir(myargv[1]);
-                // printf("%d", c);fflush(stdout);
-                // DIR* dir = opendir(myargv[1]);
-                // if (dir) {
-                //     closedir(dir);
-                    
-                // } else{
-                //     printf("Directory does not exist!\n");fflush(stdout);
-                // }
             }
             continue;
         }
@@ -198,7 +184,6 @@ int main(int argc, char* argv[]){
 			if((strcmp(myargv[1], "date") == 0)||(strcmp(myargv[1], "mkdir") == 0)||(strcmp(myargv[1], "rm") == 0)||(strcmp(myargv[1], "ls") == 0)||(strcmp(myargv[1], "cat") == 0)){
 		        char cmdstr[1000];
                 char newtemp[1000];
-                // printf("myargc = %d", myargc);
                 for (int o = 1; o<myargc; o++){
                     strcat(newtemp, myargv[o]);
                     if (o<(myargc - 1)){strcat(newtemp, " ");}
@@ -206,7 +191,6 @@ int main(int argc, char* argv[]){
 			    strcpy(cmdstr, ogdir);
 			    strcat(cmdstr, "/");
                 strcat(cmdstr, newtemp);
-                // printf("cmdstr = [%s]", cmdstr);fflush(stdout);
 				pthread_t tid;
 				int t = pthread_create(&tid, NULL, mysyscall(cmdstr), NULL);
 				int jo = pthread_join(tid, NULL);
@@ -225,9 +209,7 @@ int main(int argc, char* argv[]){
             exit(1);
             }
         else if (rc == 0) { // child (new process)
-            // if (!strcmp(argv[0], "exit")){break;}
             if (!strcmp(myargv[0],"date")){
-                // printf("myargc = %d\n",myargc);fflush(stdout);
                 char* argvnew[200];
                 char* temp = ogdir;
                 strcat(temp, "/date");
@@ -235,7 +217,6 @@ int main(int argc, char* argv[]){
                 for(int j = 1; j<myargc; j++){
                     argvnew[j] = myargv[j];
                 }
-                // argvnew[myargc] = '\0';
                 execvp(argvnew[0], argvnew);
                 continue;
             }
@@ -244,17 +225,10 @@ int main(int argc, char* argv[]){
                 char* temp = ogdir;
                 strcat(temp, "/ls");
                 argvnew[0] = temp;
-                // printf("[%s]\n",argvnew[0]);fflush(stdout);
                 for(int j = 1; j<myargc; j++){
                     argvnew[j] = myargv[j];
-                    // printf("[%s]\n",argvnew[j]);fflush(stdout);
                 }                
-                // printf("argvnew[0] = [%s]", argvnew[0]);fflush(stdout);
                 execvp(argvnew[0], argvnew);
-                // printf("%s\n", explain_errno_execvp(errno, argvnew[0], argvnew));
-                // int errcode=errno;
-                // printf("%d", errcode);fflush(stdout);
-                // argc = 0;
                 continue;
             }
             else if (!strcmp(myargv[0],"mkdir")){
@@ -265,7 +239,6 @@ int main(int argc, char* argv[]){
                 for(int j = 1; j<myargc; j++){
                     argvnew[j] = myargv[j];
                 }
-                // argvnew[argc] = 0;
                 execvp(argvnew[0], argvnew);
                 continue;
             }
@@ -296,13 +269,9 @@ int main(int argc, char* argv[]){
                 continue;
             }
         }
-    else { // parent goes down this path (main)
-        // printf("hello, I am parent of %d (pid:%d)\n", rc, (int) getpid());
-
+    else {
         wait(NULL);
-        fflush(stdout);
         }
     }
-    fflush(stdout);
     return 0;
 }
